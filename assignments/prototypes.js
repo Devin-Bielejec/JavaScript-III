@@ -38,7 +38,7 @@ function CharacterStats(details){
   this.healthPoints = details.healthPoints
 }
 
-CharacterStats.prototype = Object.create(GameObject.prototype); //copyes GO prototype to CS prototype
+CharacterStats.prototype = Object.create(GameObject.prototype); //takes destroy from game object and puts it on character stats prototype
 
 CharacterStats.prototype.takeDamage = function() { //add another method to CS prototype
   return `${this.name} took damage`;
@@ -153,7 +153,8 @@ Villian.prototype = Object.create(Humanoid.prototype);
 
 function randomItemFromArray(array){
   return array[Math.floor(Math.random()*array.length)];
-} //stole from internet, but takes some random index
+} 
+//stole from internet, but takes some random index
 //generate a random float from 0 to 1 exclusive to 1, so let's say .5
 //then does .5*length of array, which (lets 3), so ends up at 1.5, rounds down to 1, okay makes sense
 
@@ -161,15 +162,19 @@ Villian.prototype.attack = function(enemy, weapon) {
   let damage = 0;
   if (weapon == "Rocket") {
     damage = 20;
-  } else if (weapon == "laser") {
+  } else if (weapon == "Laser") {
     damage = 15;
-  } else if (weapon == "sonic beam") {
+  } else if (weapon == "Sonic Beam") {
     damage = 30;
   } else {
     damage = 0; //someone messed up, technically don't need this line
   }
   enemy.healthPoints -= damage;
-  return `${this.name} [${this.healthPoints}] uses their ${this.weapon} to deal ${damage} to ${enemy.name} [${enemy.healthPoints}]`;
+  if (enemy.healthPoints <= 0) {
+    return `${$enemy.name} has fallen due to the ${weapon}.`;
+  } else{
+    return `${this.name} [${this.healthPoints}] uses their ${this.weapon} to deal ${damage} to ${enemy.name} [${enemy.healthPoints}]`;
+  }
 }
 
 function Hero(details){ //physical hero, so groundSmash, punch, kick
@@ -178,11 +183,20 @@ function Hero(details){ //physical hero, so groundSmash, punch, kick
 
 Hero.prototype = Object.create(Humanoid.prototype);
 
-Hero.prototype.groundSmash = function(enemy, weapon) {
+Hero.prototype.attack = function(enemy, weapon) {
   //writing if statment a different way
   let damage = 0;
-  (weapon == "fist") ? damage = 
-  return `${this.name} [${this.healthPoints}] smashes the ground and injures ${enemy.name} [${enemy.healthPoints}]`;
+  
+  (weapon == "Fist") ? damage = 15 : 
+  (weapon == "Foot") ? damage = 20 :
+  (weapon == "Double Fists") ? damage = 30 : damage = 0;
+  
+  damage *= (this.dimensions.length+this.dimensions.width+this.dimensions.height);
+  console.log(damage);
+  enemy.healthPoints -= damage;
+  console.log(enemy);
+
+  return enemy.healthPoints <= 0 ? `${enemy.name} has fallen due to the ${weapon}.`: `${this.name} [${this.healthPoints}] smashes the ground and injures ${enemy.name} [${enemy.healthPoints}]`;
 }
 
 
@@ -193,7 +207,7 @@ const badGuy = new Villian({
     width: Math.floor(Math.random() * 10+1),
     height: Math.floor(Math.random() * 10+1),
   },
-  healthPoints: Math.floor(Math.random() * 10+100),
+  healthPoints: Math.floor(Math.random() * 10+1000),
   name: 'Johnny',
   team: 'The Unknown',
   weapons: [
@@ -201,5 +215,35 @@ const badGuy = new Villian({
     'Rocket',
     'Sonic Beam'
   ],
-  language: 'Elvish',
+  language: 'French',
 });
+
+const goodGuy = new Hero({
+  createdAt: new Date(),
+  dimensions: {
+    length: Math.floor(Math.random() * 10+1),
+    width: Math.floor(Math.random() * 10+1),
+    height: Math.floor(Math.random() * 10+1),
+  },
+  healthPoints: Math.floor(Math.random() * 10+1000),
+  name: 'Gerald',
+  team: 'The Known',
+  weapons: [
+    'Fist',
+    'Foot',
+    'Double Fists'
+  ],
+  language: 'English',
+});
+
+//let's see if we can do a basic battle first
+
+//also need a dead feature?
+
+console.log(goodGuy.attack(badGuy, randomItemFromArray(goodGuy.weapons)));
+
+console.log(badGuy.attack(goodGuy, randomItemFromArray(goodGuy.weapons)));
+
+console.log(goodGuy.attack(badGuy, randomItemFromArray(goodGuy.weapons)));
+
+console.log(badGuy.attack(goodGuy, randomItemFromArray(goodGuy.weapons)));
