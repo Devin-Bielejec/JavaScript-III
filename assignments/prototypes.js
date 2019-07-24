@@ -160,6 +160,7 @@ function randomItemFromArray(array){
 
 Villian.prototype.attack = function(enemy, weapon) {
   let damage = 0;
+  console.log("WEAPON is", weapon)
   if (weapon == "Rocket") {
     damage = 20;
   } else if (weapon == "Laser") {
@@ -171,9 +172,9 @@ Villian.prototype.attack = function(enemy, weapon) {
   }
   enemy.healthPoints -= damage;
   if (enemy.healthPoints <= 0) {
-    return `${$enemy.name} has fallen due to the ${weapon}.`;
+    return `${enemy.name} has fallen due to the ${weapon}.`;
   } else{
-    return `${this.name} [${this.healthPoints}] uses their ${this.weapon} to deal ${damage} to ${enemy.name} [${enemy.healthPoints}]`;
+    return `${this.name} [${this.healthPoints}] uses his ${weapon} to deal ${damage} to ${enemy.name} [${enemy.healthPoints}]`;
   }
 }
 
@@ -192,11 +193,9 @@ Hero.prototype.attack = function(enemy, weapon) {
   (weapon == "Double Fists") ? damage = 30 : damage = 0;
   
   damage *= (this.dimensions.length+this.dimensions.width+this.dimensions.height);
-  console.log(damage);
   enemy.healthPoints -= damage;
-  console.log(enemy);
 
-  return enemy.healthPoints <= 0 ? `${enemy.name} has fallen due to the ${weapon}.`: `${this.name} [${this.healthPoints}] smashes the ground and injures ${enemy.name} [${enemy.healthPoints}]`;
+  return enemy.healthPoints <= 0 ? `${enemy.name} has fallen due to the ${weapon}.`: `${this.name} [${this.healthPoints}] smashes the ground with his ${weapon} for ${damage} and injures ${enemy.name} [${enemy.healthPoints}]`;
 }
 
 
@@ -240,10 +239,23 @@ const goodGuy = new Hero({
 
 //also need a dead feature?
 
-console.log(goodGuy.attack(badGuy, randomItemFromArray(goodGuy.weapons)));
+// console.log(goodGuy.attack(badGuy, randomItemFromArray(goodGuy.weapons)));
+// console.log(badGuy.attack(goodGuy, randomItemFromArray(goodGuy.weapons)));
+// console.log(goodGuy.attack(badGuy, randomItemFromArray(goodGuy.weapons)));
+// console.log(badGuy.attack(goodGuy, randomItemFromArray(goodGuy.weapons)));
 
-console.log(badGuy.attack(goodGuy, randomItemFromArray(goodGuy.weapons)));
+//let's make this random now
 
-console.log(goodGuy.attack(badGuy, randomItemFromArray(goodGuy.weapons)));
+function battle(person1, person2){
+  console.log(`The battle starts with ${person1.name} [${person1.healthPoints}] and ${person2.name} [${person2.healthPoints}]`);
+  for (let i = 0; !(person1.healthPoints <= 0 || person2.healthPoints <= 0); i++){
+    //50-50 if you get to attack
+    let contestants = [person1, person2];
+    const attacker = randomItemFromArray(contestants);
+    contestants.slice(contestants.indexOf(attacker),1);
+    const defender = contestants[0];
+    console.log(attacker.attack(defender, randomItemFromArray(attacker.weapons)));
+  }
+}
 
-console.log(badGuy.attack(goodGuy, randomItemFromArray(goodGuy.weapons)));
+battle(goodGuy, badGuy);
