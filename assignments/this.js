@@ -7,7 +7,7 @@
 
 * 3. New Binding - When we create a new binding using bind, in which "this" transfers its owner to the new object specified.
 
-* 4. Explicit Binding -
+* 4. Explicit Binding - When you use apply or call to switch where "this" belongs.
 *
 * write out a code example of each explanation above
 */
@@ -47,6 +47,21 @@ const hatefulPerson = new superCoolPerson("hateful");
 console.log(hatefulPerson.feeling);
 //but now this.feeling refers to hate because we rebound it!
 
+
+
+
 // Principle 4
 
 // code example for Explicit Binding
+const newAttributes = {
+    feeling: "excitement"
+}
+
+function showMeLove (){
+    console.log(`Hello ${this.feeling} is very awesome!`);
+}
+
+showMeLove.call(newAttributes);
+//So we create a function.
+
+//On every function there is an option to use call/apply, which allows us to take data from an obj and then within our function we can refer to that data by using this
