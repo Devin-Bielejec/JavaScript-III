@@ -5,8 +5,8 @@
 
 * 2. Implicit Binding - When "this" is used within an object "this" refers to the object name. Look to the left of the dot when the function is invoked to see what "this" is referring to
 
+* 3. New Binding - When we create a new binding using bind, in which "this" transfers its owner to the new object specified.
 
-* 3. New Binding - When 
 * 4. Explicit Binding -
 *
 * write out a code example of each explanation above
@@ -24,16 +24,28 @@ console.log(global.a);
 const devin = {
     name: "Devin",
     eat: function(){
-        console.log(`${this.name} likes to eat`);
+        return (`${this.name} likes to eat`)
     }
-};
+}
 
-devin.eat();
+console.log(devin.eat());
 
 
 // Principle 3
 
 // code example for New Binding
+function superCoolPerson(feeling){
+    this.name = "Devin";
+    this.feeling = feeling;
+}
+
+const sadPerson = new superCoolPerson("sadness");
+console.log(sadPerson.feeling);
+// this.feeling refers to sadness
+
+const hatefulPerson = new superCoolPerson("hateful");
+console.log(hatefulPerson.feeling);
+//but now this.feeling refers to hate because we rebound it!
 
 // Principle 4
 
