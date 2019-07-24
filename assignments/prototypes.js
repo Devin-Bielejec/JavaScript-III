@@ -23,7 +23,7 @@ function GameObject(details){
 }
 
 GameObject.prototype.destroy = function() {
-  returns `${this.name} was removed from the game.`;
+  return `${this.name} was removed from the game.`;
 }
 
 /*
@@ -33,13 +33,15 @@ GameObject.prototype.destroy = function() {
   * should inherit destroy() from GameObject's prototype
 */
 
-function CharacterStats(healthPoints){
+function CharacterStats(details){
   GameObject.call(this, details),
-  this.healthPoints = details.healthPoints,
+  this.healthPoints = details.healthPoints
 }
 
-CharacterStats.prototype.takeDamage = function() {
-  returns `${this.name} took damage`;
+CharacterStats.prototype = Object.create(GameObject.prototype); //copyes GO prototype to CS prototype
+
+CharacterStats.prototype.takeDamage = function() { //add another method to CS prototype
+  return `${this.name} took damage`;
 }
 
 /*
@@ -51,7 +53,20 @@ CharacterStats.prototype.takeDamage = function() {
   * should inherit destroy() from GameObject through CharacterStats
   * should inherit takeDamage() from CharacterStats
 */
- 
+
+function Humanoid(details) {
+  CharacterStats.call(this, details), //gets properties transferred to humanoid from CS (and hence from GO)
+  this.team = details.team,
+  this.weapons = details.weapons,
+  this.language = details.language
+}
+
+Humanoid.prototype = Object.create(CharacterStats.prototype);
+
+Humanoid.prototype.greet = function() {
+  return `${this.name} offers a greeting in ${this.language}`;
+}
+
 /*
   * Inheritance chain: GameObject -> CharacterStats -> Humanoid
   * Instances of Humanoid should have all of the same properties as CharacterStats and GameObject.
@@ -59,7 +74,6 @@ CharacterStats.prototype.takeDamage = function() {
 */
 
 // Test you work by un-commenting these 3 objects and the list of console logs below:
-
 
 const mage = new Humanoid({
   createdAt: new Date(),
