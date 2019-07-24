@@ -136,7 +136,51 @@ console.log(archer.greet()); // Lilith offers a greeting in Elvish.
 console.log(mage.takeDamage()); // Bruce took damage.
 console.log(swordsman.destroy()); // Sir Mustachio was removed from the game.
 
-// Stretch task: 1
+// Stretch task: 
 // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
 // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
 // * Create two new objects, one a villain and one a hero and fight it out with methods!
+
+
+// team, weapons, language,    healthpoints
+
+//technological villian, so laserbeam, rocket, sonic blas
+function Villian(details){ 
+  Humanoid.call(this, details)
+}
+
+Villian.prototype = Object.create(Humanoid.prototype);
+
+Villian.prototype.laserBeam = function(enemy) {
+  enemy.healthPoints -= 15;
+  return `${this.name} [${this.healthPoints}] shot a laser Beam at ${enemy.name} [${enemy.healthPoints}]`;
+}
+
+function Hero(details){ //physical hero, so groundSmash, punch, kick
+  Humanoid.call(this, details)
+}
+
+Hero.prototype = Object.create(Humanoid.prototype);
+
+Hero.prototype.groundSmash = function(enemy) {
+  enemy.healthPoints -= 16;
+  return `${this.name} [${this.healthPoints}] smashes the ground and injures ${enemy.name} [${enemy.healthPoints}]`;
+}
+
+
+const badGuy = new Villian({
+  createdAt: new Date(),
+  dimensions: {
+    length: Math.floor(Math.random() * 10+1),
+    width: Math.floor(Math.random() * 10+1),
+    height: Math.floor(Math.random() * 10+1),
+  },
+  healthPoints: Math.floor(Math.random() * 10+100),
+  name: 'Johnny',
+  team: 'The Unknown',
+  weapons: [
+    'Bow',
+    'Dagger',
+  ],
+  language: 'Elvish',
+});
