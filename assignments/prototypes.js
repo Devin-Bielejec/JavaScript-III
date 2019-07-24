@@ -151,9 +151,25 @@ function Villian(details){
 
 Villian.prototype = Object.create(Humanoid.prototype);
 
-Villian.prototype.laserBeam = function(enemy) {
-  enemy.healthPoints -= 15;
-  return `${this.name} [${this.healthPoints}] shot a laser Beam at ${enemy.name} [${enemy.healthPoints}]`;
+function randomItemFromArray(array){
+  return array[Math.floor(Math.random()*array.length)];
+} //stole from internet, but takes some random index
+//generate a random float from 0 to 1 exclusive to 1, so let's say .5
+//then does .5*length of array, which (lets 3), so ends up at 1.5, rounds down to 1, okay makes sense
+
+Villian.prototype.attack = function(enemy, weapon) {
+  let damage = 0;
+  if (weapon == "Rocket") {
+    damage = 20;
+  } else if (weapon == "laser") {
+    damage = 15;
+  } else if (weapon == "sonic beam") {
+    damage = 30;
+  } else {
+    damage = 0; //someone messed up, technically don't need this line
+  }
+  enemy.healthPoints -= damage;
+  return `${this.name} [${this.healthPoints}] uses their ${this.weapon} to deal ${damage} to ${enemy.name} [${enemy.healthPoints}]`;
 }
 
 function Hero(details){ //physical hero, so groundSmash, punch, kick
@@ -162,8 +178,10 @@ function Hero(details){ //physical hero, so groundSmash, punch, kick
 
 Hero.prototype = Object.create(Humanoid.prototype);
 
-Hero.prototype.groundSmash = function(enemy) {
-  enemy.healthPoints -= 16;
+Hero.prototype.groundSmash = function(enemy, weapon) {
+  //writing if statment a different way
+  let damage = 0;
+  (weapon == "fist") ? damage = 
   return `${this.name} [${this.healthPoints}] smashes the ground and injures ${enemy.name} [${enemy.healthPoints}]`;
 }
 
@@ -179,8 +197,9 @@ const badGuy = new Villian({
   name: 'Johnny',
   team: 'The Unknown',
   weapons: [
-    'Bow',
-    'Dagger',
+    'Laser',
+    'Rocket',
+    'Sonic Beam'
   ],
   language: 'Elvish',
 });
